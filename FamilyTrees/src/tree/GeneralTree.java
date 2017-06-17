@@ -1,6 +1,10 @@
 package tree;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+
 
 public class GeneralTree<E> implements Tree {
 	
@@ -17,19 +21,17 @@ public class GeneralTree<E> implements Tree {
 
 	@Override
 	public TreeNode root() {
-		// TODO Auto-generated method stub
 		return root;
 	}
 
 	@Override
 	public TreeNode parent(TreeNode tn) {
-		// TODO Auto-generated method stub
-		return null;
+		return tn.getParent();
 	}
 
 	@Override
 	public Iterable<TreeNode> children(TreeNode tn) {
-		return tn.getNodeChildren();
+		return tn.getChildren();
 	}
 
 	@Override
@@ -44,14 +46,48 @@ public class GeneralTree<E> implements Tree {
 
 	@Override
 	public Iterator<E> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<E> list = new ArrayList<>();
+		for(E element: treeNodes()) {
+			list.add(element);
+		}
+		
+		return list.iterator();
 	}
 
 	@Override
-	public Iterable<TreeNode> treeNodes() {
+	public Iterable<E> treeNodes() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public Iterable<TreeNode> preorder() {
+		List<TreeNode> snap = new ArrayList<>();
+		if (!isEmpty()) {
+			preorderSubtree(root(), snap);
+		}
+		return snap;
+	}
+	
+	private void preorderSubtree(TreeNode parent, List<TreeNode> snap) {
+		snap.add(parent);
+		for (TreeNode child : children(parent)) {
+			preorderSubtree(child, snap);
+		}
+	}
+	
+	public Iterable<TreeNode> postorder() {
+		List<TreeNode> snap = new ArrayList<>();
+		if (!isEmpty()) {
+			postorderSubtree(root(), snap);
+		}
+		return snap;
+	}
+	
+	private void postorderSubtree(TreeNode parent, List<TreeNode> snap) {		
+		for (TreeNode child : children(parent)) {
+			preorderSubtree(child, snap);
+		}
+		snap.add(parent);
 	}
 
 
@@ -70,6 +106,11 @@ public class GeneralTree<E> implements Tree {
 	public boolean isEmpty() {
 		return size() == 0;
 	}
+
+
+
+
+	
 	
 
 

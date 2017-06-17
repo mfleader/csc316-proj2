@@ -35,8 +35,8 @@ public class proj2 {
 	 * @param poststart
 	 * 				the place in posttrav where the post order traversal of this subtree begins
 	 */
-	public static void buildTree(int size, int prestart, int poststart) {
-		
+	public static TreeNode buildTree(int size, int prestart, int poststart) {
+		return null;
 	}
 	
 	public static char[] makeCharArray(String line) {

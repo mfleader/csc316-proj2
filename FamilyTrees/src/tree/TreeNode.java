@@ -34,7 +34,7 @@ public class TreeNode<E> {
         this(data, null);
     }
     
-    public LinkedList<TreeNode> getNodeChildren() {
+    public LinkedList<TreeNode> getChildren() {
     	return children;
     }
     
@@ -43,6 +43,30 @@ public class TreeNode<E> {
     		return children.size(); 
     	}
     	return 0;
+    }
+    
+    public TreeNode getParent() {
+    	return parent;
+    }
+    
+    public void setParent(TreeNode n) {
+    	this.parent = n;
+    }
+    
+    public void addChild(TreeNode n) {
+    	children.addLast(n);
+    }
+    
+    public void addChildAt(int index, TreeNode n) {
+    	children.add(index, n);
+    }
+    
+    public E getData() {
+    	return data;
+    }
+    
+    public void setData(E element) {
+    	this.data = element;
     }
 
 

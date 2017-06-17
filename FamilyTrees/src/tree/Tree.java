@@ -2,17 +2,19 @@ package tree;
 
 import java.util.Iterator;
 
+import unused.Position;
+
 public interface Tree<E> extends Iterable<E> {
-	
+		
 	TreeNode root();
 	TreeNode parent(TreeNode p);
-	Iterable<TreeNode> children(TreeNode p);
 	int numChildren(TreeNode p);
-	boolean isInternal(TreeNode p);
-	boolean isExternal(TreeNode p);
-	boolean isRoot(TreeNode p);
+	Iterable<TreeNode> children(TreeNode tn);
+	Iterable<TreeNode> treeNodes(); /* iterate through nodes */
+	Iterator<E> iterator(); /* iterate through data objects */
 	int size();
 	boolean isEmpty();
-	Iterator<E> iterator();
-	Iterable<TreeNode> treeNodes();
+	boolean isInternal(TreeNode tn);
+	boolean isExternal(TreeNode tn);
+	boolean isRoot(TreeNode tn);
 }
