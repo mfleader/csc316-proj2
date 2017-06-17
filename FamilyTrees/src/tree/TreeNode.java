@@ -1,5 +1,7 @@
 package tree;
 
+import java.util.LinkedList;
+
 public class TreeNode<E> {
 	
     /** the data within the element */
