@@ -1,11 +1,12 @@
 package tree;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class proj2 {
 	
-	private char[] pretrav;
-	private char[] posttrav;
+	private static char[] pretrav;
+	private static char[] posttrav;
 	
 	public static void main(String[] args) {
 		
@@ -14,9 +15,9 @@ public class proj2 {
         while (input.hasNextLine()) {
         	String line = input.nextLine();
         	if (line.charAt(0) == '<') {
-        		
+        		pretrav = makeCharArray(line.substring(2));
         	} else if (line.charAt(0) == '>') {
-        		
+        		posttrav = makeCharArray(line.substring(2));
         	} else if (line.charAt(0) == '?') {
         		
         	}
@@ -38,12 +39,12 @@ public class proj2 {
 		
 	}
 	
-	public static char[] makePretrav(String line) {
+	public static char[] makeCharArray(String line) {
 		char[] array = null;
+		LinkedList<Character> list = new LinkedList<Character>();
 		int index = 0;
 		
 		if (line.length() > 0) {
-			array = new char[line.length()];
 			for (int k = 0; k < line.length(); k++) {
 				if (line.charAt(k) != ' '
 					&& line.charAt(k) != '<'
@@ -52,9 +53,15 @@ public class proj2 {
 					&& line.charAt(k) != '.'
 					&& line.charAt(k) != ',') {
 					
-					array[index++] = line.charAt(k);
+					list.addLast(line.charAt(k));
 				}
 			}
+			
+			array = new char[list.size()];
+			for (int j = 0; j < list.size(); j++) {
+				array[j] = list.get(j).charValue();
+			}
+			
 		}
 		
 		return array;

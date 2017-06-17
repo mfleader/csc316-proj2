@@ -29,19 +29,16 @@ public class GeneralTree<E> implements Tree {
 
 	@Override
 	public Iterable<TreeNode> children(TreeNode tn) {
-		// TODO Auto-generated method stub
-		return null;
+		return tn.getNodeChildren();
 	}
 
 	@Override
 	public int numChildren(TreeNode tn) {
-		// TODO Auto-generated method stub
 		return tn.numChildren();
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
