@@ -2,6 +2,8 @@ package unused;
 
 import java.util.Iterator;
 
+import tree.TreeNode;
+
 public interface Tree<E> extends Iterable<E> {
 		
 	TreeNode root();

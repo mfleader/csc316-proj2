@@ -3,8 +3,6 @@ package tree;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-import unused.TreeNode;
-
 public class proj2 {
 	
 	private static Character[] pretrav;
@@ -37,7 +35,7 @@ public class proj2 {
 	 * @param poststart
 	 * 				the place in posttrav where the post order traversal of this subtree begins
 	 */
-	public static TreeNode buildTree(int size, int prestart, int poststart) {
+	public static TreeNode<Character> buildTree(int size, int prestart, int poststart) {
 		return null;
 	}
 	

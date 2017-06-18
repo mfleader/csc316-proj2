@@ -1,5 +1,7 @@
 package unused;
 
+import tree.TreeNode;
+
 public abstract class AbstractTree<E> implements Tree<E> {
 	
 	private TreeNode root;

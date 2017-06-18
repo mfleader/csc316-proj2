@@ -1,4 +1,4 @@
-package unused;
+package tree;
 
 import java.util.LinkedList;
 
@@ -7,9 +7,9 @@ public class TreeNode<E> {
     /** the data within the element */
 	private E data;
 	/** the parent TreeNode of this TreeNode */
-	private TreeNode parent;
+	private TreeNode<E> parent;
 	/** a reference to the next element in the list */
-	private LinkedList<TreeNode> children;
+	private LinkedList<TreeNode<E>> children;
 	/** true if an ancestor of this node */
 	private boolean mark;
 
@@ -20,10 +20,10 @@ public class TreeNode<E> {
      * @param next
      *              the pointer to the next element
      */
-    public TreeNode(E data, TreeNode parent) {
+    public TreeNode(E data, TreeNode<E> parent) {
         this.data = data;
         this.parent = parent;
-        children = new LinkedList<TreeNode>();
+        children = new LinkedList<TreeNode<E>>();
         mark = false;
     }
 
@@ -36,7 +36,7 @@ public class TreeNode<E> {
         this(data, null);
     }
     
-    public LinkedList<TreeNode> getChildren() {
+    public LinkedList<TreeNode<E>> getChildren() {
     	return children;
     }
     
@@ -47,19 +47,19 @@ public class TreeNode<E> {
     	return 0;
     }
     
-    public TreeNode getParent() {
+    public TreeNode<E> getParent() {
     	return parent;
     }
     
-    public void setParent(TreeNode n) {
+    public void setParent(TreeNode<E> n) {
     	this.parent = n;
     }
     
-    public void addChild(TreeNode n) {
+    public void addChild(TreeNode<E> n) {
     	children.addLast(n);
     }
     
-    public void addChildAt(int index, TreeNode n) {
+    public void addChildAt(int index, TreeNode<E> n) {
     	children.add(index, n);
     }
     
