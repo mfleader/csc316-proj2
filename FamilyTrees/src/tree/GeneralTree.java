@@ -6,8 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-
-public class GeneralTree<E> implements Tree {
+public class GeneralTree<E> {
 	
 	private TreeNode root;
 	
@@ -17,47 +16,45 @@ public class GeneralTree<E> implements Tree {
 	}
 	
 	public GeneralTree() {
-		this(null);
+		root = null;
 	}
 
-	@Override
+	
 	public TreeNode root() {
 		return root;
 	}
 
-	@Override
 	public TreeNode parent(TreeNode tn) {
-		return tn.getParent();
+		return tn.parent;
 	}
 
-	@Override
+	
 	public Iterable<TreeNode> children(TreeNode tn) {
-		return tn.getChildren();
+		return tn.children;
 	}
 
-	@Override
+
 	public int numChildren(TreeNode tn) {
 		return tn.numChildren();
 	}
 
-	@Override
+	
 	public int size() {
-		return 0;
+		int size = 0;
+		for (TreeNode element : preorder()) {
+			size++;
+		}
+		return size;
 	}
 
-	@Override
-	public Iterator<E> iterator() {
-		ArrayList<E> list = new ArrayList<>();
-		for(E element: treeNodes()) {
+	
+	public Iterator<TreeNode> iterator() {
+		ArrayList<TreeNode> list = new ArrayList<>();
+		for(TreeNode element : preorder()) {
 			list.add(element);
 		}
 		
 		return list.iterator();
-	}
-
-	@Override
-	public Iterable<E> treeNodes() {		
-		return null;
 	}
 	
 	public LinkedQueue<TreeNode> levelOrder(TreeNode tn) {
@@ -119,19 +116,54 @@ public class GeneralTree<E> implements Tree {
 	}
 	
 	public boolean isEmpty() {
-		return size() == 0;
+		return root == null;
 	}
 
 
+	public class TreeNode {
+		
+	    /** the data within the element */
+		private E data;
+		/** the parent TreeNode of this TreeNode */
+		private TreeNode parent;
+		/** a reference to the next element in the list */
+		private LinkedList<TreeNode> children;
+		/** true if an ancestor of this node */
+		private boolean mark;
 
+	    /**
+	     * Constructs a Node given data and a pointer to the next element.
+	     * @param data
+	     *              the data in this element
+	     * @param next
+	     *              the pointer to the next element
+	     */
+	    public TreeNode(E data, TreeNode parent) {
+	        this.data = data;
+	        this.parent = parent;
+	        children = new LinkedList<TreeNode>();
+	        mark = false;
+	    }
 
-	
-	
-
-
-
-
-	
-	
-
+	    /**
+	     * Constructs a TreeNode with a null parent
+	     * @param data
+	     *              the data in this element
+	     */
+	    public TreeNode(E data) {
+	        this(data, null);
+	    }
+	    
+	    
+	    public int numChildren() {
+	    	if (children != null) {
+	    		return children.size(); 
+	    	}
+	    	return 0;
+	    }
+	    
+	    public E getData() {
+	    	return data;
+	    }
+	}
 }

@@ -1,8 +1,6 @@
-package tree;
+package unused;
 
 import java.util.Iterator;
-
-import unused.Position;
 
 public interface Tree<E> extends Iterable<E> {
 		

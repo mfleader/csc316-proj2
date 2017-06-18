@@ -3,10 +3,12 @@ package tree;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import unused.TreeNode;
+
 public class proj2 {
 	
-	private static char[] pretrav;
-	private static char[] posttrav;
+	private static Character[] pretrav;
+	private static Character[] posttrav;
 	
 	public static void main(String[] args) {
 		
@@ -39,8 +41,8 @@ public class proj2 {
 		return null;
 	}
 	
-	public static char[] makeCharArray(String line) {
-		char[] array = null;
+	public static Character[] makeCharArray(String line) {
+		Character[] array = null;
 		LinkedList<Character> list = new LinkedList<Character>();
 		int index = 0;
 		
@@ -57,9 +59,9 @@ public class proj2 {
 				}
 			}
 			
-			array = new char[list.size()];
+			array = new Character[list.size()];
 			for (int j = 0; j < list.size(); j++) {
-				array[j] = list.get(j).charValue();
+				array[j] = list.get(j);
 			}
 			
 		}
