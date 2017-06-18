@@ -2,6 +2,7 @@ package tree;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -55,9 +56,23 @@ public class GeneralTree<E> implements Tree {
 	}
 
 	@Override
-	public Iterable<E> treeNodes() {
-		// TODO Auto-generated method stub
+	public Iterable<E> treeNodes() {		
 		return null;
+	}
+	
+	public LinkedQueue<TreeNode> levelOrder(TreeNode tn) {
+		LinkedQueue<TreeNode> queue = new LinkedQueue<TreeNode>();
+		if (tn == null) {
+			return queue;
+		}
+		queue.enqueue(root);
+		while (!queue.isEmpty()) {
+			TreeNode parent = queue.dequeue();
+			for (TreeNode child : children(parent)) {
+				queue.enqueue(child);
+			}
+		}
+		return queue;
 	}
 	
 	public Iterable<TreeNode> preorder() {
