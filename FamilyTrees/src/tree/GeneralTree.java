@@ -135,6 +135,12 @@ public class GeneralTree<E> {
 	public boolean isEmpty() {
 		return root == null;
 	}
+	
+	public int loneliness(TreeNode<E> node) {
+		return loneliness(node, 0);
+	}
+	
+	public int loneline
 
 
 
