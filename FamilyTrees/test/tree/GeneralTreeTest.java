@@ -62,7 +62,9 @@ public class GeneralTreeTest {
 	public void testLevelOrder() {
 		GeneralTree<Character> tree = new GeneralTree<Character>(A);
 		
+		
 		tree.insert(tree.root(), B);
+		
 		tree.insert(tree.root(), C);
 		tree.insert(tree.root(), D);
 		TreeNode<Character> tnB = tree.root().getChildren().getFirst();
@@ -82,20 +84,18 @@ public class GeneralTreeTest {
 		tree.insert(tnF, K);
 		TreeNode<Character> tnK = tnF.getChildren().getLast();
 		
+		
 		tree.insert(tnC, G);
 		TreeNode<Character> tnG = tnC.getChildren().getLast();
 		tree.insert(tnC, H);
 		TreeNode<Character> tnH = tnC.getChildren().getLast();
 		
-		/*
-		LinkedQueue<TreeNode<Character>> queue = tree.levelOrder(tree.root());
-		assertEquals(11, queue.size());
-		for (int k = 0; k < queue.size(); k++) {
-			assertEquals(charArry[k], queue.dequeue());
-		}
-		*/
-		tree.levelOrder(tree.root());
+		
 
+		tree.levelOrder(tree.root());
+		System.out.println();
+		System.out.println("fanOut = " + tree.fanOut(tree.root()));
+		
 		
 		
 	}

@@ -11,7 +11,7 @@ public class TreeNode<E> {
 	/** a reference to the next element in the list */
 	private LinkedList<TreeNode<E>> children;
 	/** true if an ancestor of this node */
-	private boolean mark;
+	private int mark;
 
     /**
      * Constructs a Node given data and a pointer to the next element.
@@ -24,7 +24,7 @@ public class TreeNode<E> {
         this.data = data;
         this.parent = parent;
         children = new LinkedList<TreeNode<E>>();
-        mark = false;
+        mark = 0;
     }
 
     /**

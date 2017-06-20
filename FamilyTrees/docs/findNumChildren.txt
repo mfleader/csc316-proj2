@@ -1,0 +1,94 @@
+/* package whatever; // don't place package name! */
+ 
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+import org.junit.Assert.*;
+ 
+/* Name of the class has to be "Main" only if the class is public. */
+class Ideone
+{
+	private static final Character A = new Character('A');
+	private static final Character B = new Character('B');
+	private static final Character C = new Character('C');
+	private static final Character D = new Character('D');
+	private static final Character E = new Character('E');
+	private static final Character F = new Character('F');
+	private static final Character G = new Character('G');
+	private static final Character H = new Character('H');
+	private static final Character I = new Character('I');
+	private static final Character J = new Character('J');
+	private static final Character K = new Character('K');
+	private static final Character X = new Character('X');
+	private static final Character P = new Character('P');
+	private static final Character Z = new Character('Z');
+	private static final Character R = new Character('R');
+	private static final Character T = new Character('T');
+	private static final Character N = new Character('N');
+	private static final Character M = new Character('M');
+	private static final Character Q = new Character('Q');
+	private static final Character O = new Character('O');
+	private static final Character W = new Character('W');
+	private static final Character[] charArry = { A, B, C, D, E, F, G, H, I, J, K };
+
+ 
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Character[] array11 = { A };
+		Character[] array12 = { A };
+		System.out.println("1) 0 ? " + numChildren(array11, array12));
+		
+
+		Character[] array21 = { A, B };
+		Character[] array22 = { B, A };
+		System.out.println("2) 1 ? " + numChildren(array21, array22));
+		
+		Character[] array31 = { A, B, D };
+		Character[] array32 = { D, B, A };
+		System.out.println("3) 1 ? " + numChildren(array31, array32));
+		
+		Character[] array41 = { A, B, D };
+		Character[] array42 = { B, D, A };
+		System.out.println("4) 2 ? " + numChildren(array41, array42));
+		
+		Character[] array51 = { A, B, D, F, C, G, E };
+		Character[] array52 = { D, F, B, G, C, E, A };
+		System.out.println("5) 3 ? " + numChildren(array51, array52));
+		
+		Character[] array61 = { D, H, B, G, M, W, F, T, X, Z, C, R, P, Q, N };
+		Character[] array62 = { G, M, W, F, B, X, Z, T, R, P, C, H, N, Q, D };
+		System.out.println("6) 2 ? " + numChildren(array61, array62));			
+		
+	}
+	
+	public static int numChildren(Character[] pretrav, Character[] posttrav) {
+		int size = pretrav.length;
+		int prestart = 0;
+		int numChildren = 0;
+		int pretravIdx = prestart + 1;
+		int posttravIdxCurr = 0;
+		int posttravIdxPrev = -1;
+		while (pretravIdx < (size + prestart)) {
+			//System.out.println("start");
+			posttravIdxCurr = indexOf(pretrav[pretravIdx], posttrav);
+			//System.out.println("posttravIdxCurr = " + posttravIdxCurr);
+			pretravIdx += (posttravIdxCurr - posttravIdxPrev);
+			posttravIdxPrev = posttravIdxCurr;
+			//System.out.println("pretravIdx = " + pretravIdx);
+			numChildren++;
+		}
+		//System.out.println("numChildren = " + numChildren);
+		return numChildren;
+	}
+ 
+	public static int indexOf(Character c, Character[] array) {		
+		for (int k = 0; k < array.length; k++) {
+			if (array[k].equals(c)) {
+				return k;
+			}
+		}
+		return -1;
+	}
+ 
+ 
+}

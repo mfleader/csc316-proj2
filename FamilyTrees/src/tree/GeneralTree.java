@@ -20,17 +20,15 @@ public class GeneralTree<E> {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
+	public GeneralTree(TreeNode<Character> root) {
+		this.root = (TreeNode<E>) root;
+	}
+
 	public void insert(TreeNode<E> tn, E element) {
 		tn.getChildren().add(new TreeNode<E>(element, tn));
 	}
 	
-	public E remove(E element) {
-		
-		for (TreeNode<E> treeNodes : preorder()) {
-			
-		}
-		return null;
-	}
 
 	
 	public TreeNode<E> root() {
@@ -78,15 +76,16 @@ public class GeneralTree<E> {
 			return queue;
 		}
 		*/
-		queue.enqueue(root);
+		queue.enqueue(tn);
 		while (!queue.isEmpty()) {
 			TreeNode<E> parent = queue.dequeue();
-			System.out.print(parent.getData());
+			System.out.print(parent.getData().toString() + ", ");
+
 			for (TreeNode<E> child : children(parent)) {
 				queue.enqueue(child);
 			}
 		}
-		//return queue;
+		System.out.print(".");
 	}
 	
 	public Iterable<TreeNode<E>> preorder() {
@@ -136,11 +135,21 @@ public class GeneralTree<E> {
 		return root == null;
 	}
 	
-	public int loneliness(TreeNode<E> node) {
-		return loneliness(node, 0);
+	public int fanOut(TreeNode<E> node) {
+		return fanOut(node, 0);
 	}
 	
-	public int loneline
+	private int fanOut(TreeNode<E> node, int fan) {
+		if (numChildren(node) > fan) {
+			fan = numChildren(node);
+		}
+		for (TreeNode<E> child : node.getChildren()) {
+			fan = fanOut(child, fan);
+		}
+		return fan;
+	}
+	
+
 
 
 
