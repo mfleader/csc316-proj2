@@ -1,6 +1,10 @@
 package tree;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Scanner;
 
 public class proj2 {
@@ -60,21 +64,42 @@ public class proj2 {
 		} 		
 		if (pretrav[prestart] == posttrav[size - (prestart + 1)]) {			
 			TreeNode<Character> root = new TreeNode<Character>(pretrav[prestart]);
-						
+			ArrayList<Character> family = new ArrayList<Character>();
+			List<Character> pretravList = Arrays.asList(pretrav);
+			List<Character> posttravList = Arrays.asList(posttrav);
+			
 			int numChildren = 0;
 			int pretravIdx = prestart + 1;
 			int posttravIdxCurr = 0;
 			int posttravIdxPrev = -1;
-			while (pretravIdx < (size + prestart)) {
-				posttravIdxCurr = indexOf(pretrav[pretravIdx], posttrav);
-				pretravIdx += (posttravIdxCurr - posttravIdxPrev);
-				posttravIdxPrev = posttravIdxCurr;
-				numChildren++;
+			//family.add(pretrav[prestart]);
+			//family.add(pretrav[pretravIdx]);
+			
+			ListIterator<Character> pretravIterator = pretravList.listIterator(pretravIdx);
+			ListIterator<Character> posttravIterator = posttravList.listIterator();
+			Character c = pretravIterator.next();
+			family.add(c);
+			int familySize = 1;
+			while (posttravIterator.next() != c) {
+				familySize++;
 			}
-			for (int k = 0; k < numChildren; k++) {
-				TreeNode<Character> n = buildTree(indexOf(pretrav[prestart + 1], posttrav) + 1 - prestart, 
-													prestart + 1,
-													indexOf(pretrav[prestart + 1], posttrav) + 1);
+			
+			/*
+			while (pretravIterator.hasNext()) {
+				ListIterator<Character> posttravIterator = posttravList.listIterator();
+				while (pretravIdx < (size + prestart)) {
+					posttravIdxCurr = indexOf(pretrav[pretravIdx], posttrav);
+					pretravIdx += (posttravIdxCurr - posttravIdxPrev);
+					family.add(pretrav[pretravIdx]);
+					posttravIdxPrev = posttravIdxCurr;
+					//numChildren++;
+				}
+			}
+			*/
+
+			for (int k = 0; k < family.size(); k++) {
+				familySize = pretrav[family.get(k)] - posttrav[family.get(k - 1)];
+				TreeNode<Character> n = buildTree(familySize, pretrav[family.get(k)], posttrav[family.get(k - 1)]);
 				root.addChild(n);
 				n.setParent(root);
 			}
