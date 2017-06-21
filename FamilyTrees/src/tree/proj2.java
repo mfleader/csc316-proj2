@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class proj2 {
 	
-	private static Character[] pretrav = null;
-	private static Character[] posttrav = null;
+	private static Character[] pretrav;
+	private static Character[] posttrav;
 	
 	public static void main(String[] args) {
 		
@@ -33,10 +33,16 @@ public class proj2 {
         line = input.nextLine();
         posttrav = makeCharArray(line.substring(2));
         
+        //System.out.println(Arrays.toString(pretrav));
+        //System.out.println(Arrays.toString(posttrav));
+        System.out.println("familySize = " + familySize(pretrav[0]));
+        
+        /*
         TreeNode<Character> root = buildTree(pretrav.length, 0, 0);
         GeneralTree<Character> tree = new GeneralTree<Character>(root);
         
         tree.levelOrder(tree.root());
+        */
         
         while (input.hasNextLine()) {
         	line = input.nextLine();
@@ -111,9 +117,7 @@ public class proj2 {
 	
 	public static Character[] makeCharArray(String line) {
 		Character[] array = null;
-		LinkedList<Character> list = new LinkedList<Character>();
-		int index = 0;
-		
+		LinkedList<Character> list = new LinkedList<Character>();		
 		if (line.length() > 0) {
 			for (int k = 0; k < line.length(); k++) {
 				if (line.charAt(k) != ' '
@@ -160,6 +164,47 @@ public class proj2 {
 			numChildren++;
 		}
 		return numChildren;
+	}
+	
+	public static int familySize(Character rootC) {
+		int famSize = 1;
+		
+		CircularLinkedList<Character> pretravList = toCircularList(pretrav);
+		CircularLinkedList<Character> posttravList = toCircularList(posttrav);
+		
+
+		ListIterator<Character> preCursor = pretravList.listIterator(pretravList.find(rootC));
+		
+		System.out.println("1) preCusror.next() = " + preCursor.next());
+		System.out.println("2) preCusror.next() = " + preCursor.next());
+		System.out.println("3) preCusror.next() = " + preCursor.next());
+		System.out.println("4) preCusror.next() = " + preCursor.next());
+		System.out.println("===============");
+		
+		Character subRootC = pretravList.get(pretravList.find(rootC) + 1);		
+		ListIterator<Character> postCursor = posttravList.listIterator(posttravList.find(rootC));
+		Character postChar = postCursor.previous();
+		System.out.println("postChar = " + postChar);
+		System.out.println("rootC = " + rootC);
+		while (postChar != rootC) {		
+			System.out.println("subRootC = " + subRootC);
+			while (postChar != subRootC) {				
+				preCursor.next();
+				postChar = postCursor.next();
+			}
+			subRootC = preCursor.next();
+			preCursor.previous();
+			famSize++;			
+		}
+		return famSize;
+	}
+	
+	public static CircularLinkedList<Character> toCircularList(Character[] array) {
+		CircularLinkedList<Character> list = new CircularLinkedList<Character>();
+		for (int k = 0; k < array.length; k++) {			
+			list.append(array[k]);			
+		}
+		return list;
 	}
 	
 	
