@@ -74,6 +74,25 @@ public class TreeNode<E> {
     public void setMark(int mark) {
     	this.mark = mark;
     }
+    
+    public void clearMark() {
+    	mark = 0;
+    }
+    
+    public void incrementMark() {
+    	mark++;
+    }
+    
+    public int getMark() {
+    	return mark;
+    }
+    
+	public int distanceToAncestor(TreeNode<E> ancestor) {
+		if (this == ancestor) {
+			return 0;
+		}
+		return distanceToAncestor(ancestor.parent) + 1;
+	}
 
 
 }

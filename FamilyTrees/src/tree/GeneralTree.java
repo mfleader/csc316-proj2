@@ -31,20 +31,43 @@ public class GeneralTree<E> {
 	
 	public void clearMarks() {
 		for(TreeNode<E> element : preorder()) {
-			element.setMark(0);
+			element.clearMark();
 		}
 	}
 	
 	public void findRelationship(TreeNode<E> node0, TreeNode<E> node1) {
-		int[] array = addMarks(node0, node1);
-		
+		if (node0 == null) {
+			throw new IllegalArgumentException(node0.getData().toString() + "is not in this family tree.");
+		}
+		if (node1 == null) {
+			throw new IllegalArgumentException(node1.getData().toString() + "is not in this family tree.");
+		}
+		clearMarks();
+		markAncestors(node0);
+		TreeNode<E> leastCommonAncestor = leastCommonAncestor(node1); 
 		
 	}
 	
-	public int[] addMarks(TreeNode<E> node0, TreeNode<E> node1) {
-		int[] array = null;
-		return array;
+	
+	public void markAncestors(TreeNode<E> node) {
+		if (parent(node) != null) {
+			markAncestors(parent(node));
+		}
+		node.incrementMark();
 	}
+	
+	public TreeNode<E> leastCommonAncestor(TreeNode<E> node) {
+		if (node.getMark() == 1) {
+			return node;
+		}
+		return leastCommonAncestor(parent(node));
+	}
+	
+	public int distanceToAncestor(TreeNode<E> descendent, TreeNode<E> ancestor) {
+		return descendent.distanceToAncestor(ancestor);
+	}
+	
+
 	
 	public TreeNode<E> find(E e) {
 		for (TreeNode<E> treeNode : preorder()) {
@@ -53,6 +76,22 @@ public class GeneralTree<E> {
 			}
 		}
 		return null;
+	}
+	
+	// LinkedQueue<TreeNode<E>>
+	public void levelOrder(TreeNode<E> tn) {
+		LinkedQueue<TreeNode<E>> queue = new LinkedQueue<TreeNode<E>>();
+
+		queue.enqueue(tn);
+		while (!queue.isEmpty()) {
+			TreeNode<E> parent = queue.dequeue();
+			System.out.print(parent.getData().toString() + " ");
+
+			for (TreeNode<E> child : children(parent)) {
+				queue.enqueue(child);
+			}
+		}
+		//System.out.print(".");
 	}
 	
 
@@ -92,26 +131,6 @@ public class GeneralTree<E> {
 		}
 		
 		return list.iterator();
-	}
-	
-	// LinkedQueue<TreeNode<E>>
-	public void levelOrder(TreeNode<E> tn) {
-		LinkedQueue<TreeNode<E>> queue = new LinkedQueue<TreeNode<E>>();
-		/*
-		if (tn == null) {
-			return queue;
-		}
-		*/
-		queue.enqueue(tn);
-		while (!queue.isEmpty()) {
-			TreeNode<E> parent = queue.dequeue();
-			System.out.print(parent.getData().toString() + " ");
-
-			for (TreeNode<E> child : children(parent)) {
-				queue.enqueue(child);
-			}
-		}
-		//System.out.print(".");
 	}
 	
 	public Iterable<TreeNode<E>> preorder() {

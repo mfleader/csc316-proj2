@@ -46,17 +46,7 @@ public class GeneralTreeTest {
 		tree.insert(tree.root(), D);
 		assertEquals(3, tree.root().numChildren());
 	}
-
-	@Test
-	public void testSize() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testIterator() {
-		fail("Not yet implemented");
-	}
-
+	
 
 	@Test
 	public void testLevelOrder() {
@@ -67,9 +57,9 @@ public class GeneralTreeTest {
 		
 		tree.insert(tree.root(), C);
 		
-		tree.levelOrder(tree.root());
-		System.out.println();
-		System.out.println("fanOut = " + tree.fanOut(tree.root()));
+		//tree.levelOrder(tree.root());
+		//System.out.println();
+		//System.out.println("fanOut = " + tree.fanOut(tree.root()));
 		
 		tree.insert(tree.root(), D);
 		TreeNode<Character> tnB = tree.root().getChildren().getFirst();
@@ -97,12 +87,7 @@ public class GeneralTreeTest {
 		
 		
 
-		tree.levelOrder(tree.root());
-		System.out.println();
-		System.out.println("fanOut = " + tree.fanOut(tree.root()));
-		
-		
-		
+		//tree.levelOrder(tree.root());
 	}
 
 	@Test
@@ -137,6 +122,89 @@ public class GeneralTreeTest {
 		assertTrue(tree.isRoot(tree.root()));
 		tree.insert(tree.root(), B);		
 		assertFalse(tree.isRoot(tree.root().getChildren().getFirst()));
+	}
+	
+	@Test
+	public void testMarkAncestors() {
+		GeneralTree<Character> tree = new GeneralTree<Character>(A);
+		
+		tree.insert(tree.root(), B);		
+		tree.insert(tree.root(), C);		
+		tree.insert(tree.root(), D);		
+		TreeNode<Character> tnB = tree.root().getChildren().getFirst();
+		TreeNode<Character> tnC = tree.root().getChildren().getLast();
+		TreeNode<Character> tnD = tree.root().getChildren().getLast();
+		tree.markAncestors(tnB);
+		assertEquals(0, tnC.getMark());
+		assertEquals(0, tnD.getMark());
+		assertEquals(1, tnB.getMark());
+		assertEquals(1, tree.root().getMark());
+		tree.clearMarks();
+		
+		
+		tree.insert(tnB, E);
+		TreeNode<Character> tnE = tnB.getChildren().getLast();
+		tree.markAncestors(tnE);
+		assertEquals(0, tnC.getMark());
+		assertEquals(0, tnD.getMark());
+		assertEquals(1, tnE.getMark());
+		assertEquals(1, tnB.getMark());
+		assertEquals(1, tree.root().getMark());
+		tree.clearMarks();
+		
+		tree.insert(tnB, F);
+		TreeNode<Character> tnF = tnB.getChildren().getLast();
+		
+		tree.insert(tnF, I);
+		TreeNode<Character> tnI = tnF.getChildren().getLast();
+		tree.insert(tnF, J);
+		TreeNode<Character> tnJ = tnF.getChildren().getLast();
+		tree.insert(tnF, K);
+		TreeNode<Character> tnK = tnF.getChildren().getLast();
+				
+		tree.insert(tnC, G);
+		TreeNode<Character> tnG = tnC.getChildren().getLast();
+		tree.insert(tnC, H);
+		TreeNode<Character> tnH = tnC.getChildren().getLast();
+	}
+	
+	@Test
+	public void testLeastCommonAncestorTreeNode() {
+		GeneralTree<Character> tree = new GeneralTree<Character>(A);
+		
+		tree.insert(tree.root(), B);		
+		tree.insert(tree.root(), C);		
+		tree.insert(tree.root(), D);		
+		TreeNode<Character> tnB = tree.root().getChildren().getFirst();
+		TreeNode<Character> tnC = tree.root().getChildren().getLast();
+		TreeNode<Character> tnD = tree.root().getChildren().getLast();
+		tree.markAncestors(tnB);
+		assertEquals(tree.root(), tree.leastCommonAncestor(tnC));
+		tree.clearMarks();
+		
+		
+		tree.insert(tnB, E);
+		TreeNode<Character> tnE = tnB.getChildren().getLast();
+		
+
+		tree.insert(tnB, F);
+		TreeNode<Character> tnF = tnB.getChildren().getLast();
+		tree.markAncestors(tnF);
+		assertEquals(1, tnB.getMark());
+		assertEquals(1, tree.root().getMark());
+		assertEquals(tree.root(), tree.leastCommonAncestor(tnC));
+		
+		tree.insert(tnF, I);
+		TreeNode<Character> tnI = tnF.getChildren().getLast();
+		tree.insert(tnF, J);
+		TreeNode<Character> tnJ = tnF.getChildren().getLast();
+		tree.insert(tnF, K);
+		TreeNode<Character> tnK = tnF.getChildren().getLast();
+				
+		tree.insert(tnC, G);
+		TreeNode<Character> tnG = tnC.getChildren().getLast();
+		tree.insert(tnC, H);
+		TreeNode<Character> tnH = tnC.getChildren().getLast();
 	}
 
 
