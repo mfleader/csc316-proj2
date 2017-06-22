@@ -5,10 +5,12 @@ package tree;
  */
 
 
-import java.util.AbstractSequentialList;
+
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+
+
 
 /**
  * Models the state and behavior of a Doubly Linked List
@@ -46,6 +48,10 @@ public class CircularLinkedList<E> extends LinkedList<E> {
 		//return super.listIterator(index);
 	}
 	
+
+	
+
+	
 	
 	/**
 	 * Append an element to the end of CircularLinkedList
@@ -66,16 +72,20 @@ public class CircularLinkedList<E> extends LinkedList<E> {
 			back = node;
 		}
 		*/
-		if (size == 0) {
-			ListNode node = new ListNode(element);
+		ListNode node = new ListNode(element);
+		if (size == 0) {			
 			node.next = node;
 			node.prev = node;
 			front = node;
 			back = front;
-			size++;
+			
 		} else {
-			listIterator(size).add(element);
-		}				
+			node.prev = back;
+			node.next = front;
+			back.next = node;
+			back = node;
+		}
+		size++;
 	}
 	
 	
@@ -120,8 +130,44 @@ public class CircularLinkedList<E> extends LinkedList<E> {
 	
 	@Override
 	public E get(int index) {
-		return listIterator(index).next();
+		//return listIterator(index).next();
+		if (index < 0 || index >= size()) {
+			throw new IndexOutOfBoundsException();
+		}
+		
+		ListNode element = front;
+		
+		for (int k = 0; k < index; k++) {
+			element = element.next;
+		}
+						
+		return element.data;
 	}
+	
+    /**
+     * Gets the Node at position idx, which must range from 0 to size( ).
+     * @param idx index to search at.
+     * @return internal node corrsponding to idx.
+     * @throws IndexOutOfBoundsException if idx is not between 0 and size(), inclusive.
+     */
+    private ListNode getNode(int idx) {
+    	ListNode p;        
+        if(idx < 0 || idx > size) {
+        	throw new IndexOutOfBoundsException( "getNode index: " + idx + "; size: " + size());
+        }                        
+        if(idx < size / 2 ) {
+            p = front.next;
+            for( int k = 0; k < idx; k++ ) {
+            	p = p.next;  
+            }                         
+        } else {
+            p = back;
+            for(int k = size; k > idx; k--) {
+            	p = p.prev;
+            }                
+        }         
+        return p;
+    }
 	
 	/**
 	 * Models the state and behavior of a Linked List Iterator
@@ -154,8 +200,8 @@ public class CircularLinkedList<E> extends LinkedList<E> {
 			}
 			previousIndex = -1;
 			nextIndex = 0;
-			previous = front;
-			next = front.next;
+			previous = back;
+			next = back.next;
 			while (index > 0) {
 				previous = previous.next;
 				next = previous.next;
@@ -208,6 +254,12 @@ public class CircularLinkedList<E> extends LinkedList<E> {
 			previous = previous.next;
 			nextIndex++;
 			previousIndex++;
+			if (nextIndex == size()) {
+				nextIndex = 0;
+			}			
+			if (previousIndex == size()) {
+				previousIndex = 0;
+			}
 			return lastRetrieved.data;
 		}
 		
@@ -222,6 +274,12 @@ public class CircularLinkedList<E> extends LinkedList<E> {
 		public E previous() {
 			if (previous.data == null) {
 				throw new NoSuchElementException();
+			}
+			if (nextIndex == -1) {
+				nextIndex = size() - 1;
+			}			
+			if (previousIndex == -1) {
+				previousIndex = size() - 1;
 			}
 			lastRetrieved = previous;
 			previous = previous.prev;
@@ -360,6 +418,8 @@ public class CircularLinkedList<E> extends LinkedList<E> {
 			this.prev = prev;
 			this.next = next;			
 		}
+		
+		
 	}
 
 }

@@ -24,7 +24,7 @@ public class TreeNode<E> {
         this.data = data;
         this.parent = parent;
         children = new LinkedList<TreeNode<E>>();
-        mark = 0;
+        setMark(0);
     }
 
     /**
@@ -69,6 +69,10 @@ public class TreeNode<E> {
     
     public void setData(E element) {
     	this.data = element;
+    }
+    
+    public void setMark(int mark) {
+    	this.mark = mark;
     }
 
 

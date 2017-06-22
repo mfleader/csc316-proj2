@@ -1,16 +1,15 @@
 package tree;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 public class proj2 {
 	
 	private static Character[] pretrav;
 	private static Character[] posttrav;
+	private static ArrayList<Character> preTrav;
+	private static ArrayList<Character> postTrav;
 	
 	public static void main(String[] args) {
 		
@@ -18,45 +17,32 @@ public class proj2 {
         Scanner input = new Scanner(System.in);
         String line;
         
-        /*
-        while (pretrav == null && posttrav == null) {
-        	line = input.nextLine();
-        	if (line.charAt(0) == '<') {
-        		pretrav = makeCharArray(line.substring(2));
-        	} else if (line.charAt(0) == '>') {
-        		posttrav = makeCharArray(line.substring(2));
-        	}
-        }
-        */
         line = input.nextLine();
         pretrav = makeCharArray(line.substring(2));
         line = input.nextLine();
-        posttrav = makeCharArray(line.substring(2));
+        posttrav = makeCharArray(line.substring(2));        
+        preTrav = toArrayList(pretrav);
+        postTrav = toArrayList(posttrav);
         
-        //System.out.println(Arrays.toString(pretrav));
-        //System.out.println(Arrays.toString(posttrav));
-        System.out.println("familySize = " + familySize(pretrav[0]));
         
-        /*
         TreeNode<Character> root = buildTree(pretrav.length, 0, 0);
         GeneralTree<Character> tree = new GeneralTree<Character>(root);
         
         tree.levelOrder(tree.root());
-        */
         
+        Character[] pair = new Character[2];
         while (input.hasNextLine()) {
-        	line = input.nextLine();
+        	line = input.nextLine();        	
         	if (line.charAt(0) == '?') {
-        		// Answer questions about family tree
+        		pair = makeCharArray(line);
+        		findRelationship(pair, tree);
         	}
         }
-		
 	}
 
 
 	/**
 	 * 
-	 * @param <E>
 	 * @param size
 	 * 				the number of nodes in the subtree to be built
 	 * @param prestart
@@ -66,52 +52,31 @@ public class proj2 {
 	 */
 	public static TreeNode<Character> buildTree(int size, int prestart, int poststart) {
 		if (size == 1) {
-			return new TreeNode<Character>(pretrav[prestart]);
-		} 		
-		if (pretrav[prestart] == posttrav[size - (prestart + 1)]) {			
-			TreeNode<Character> root = new TreeNode<Character>(pretrav[prestart]);
-			ArrayList<Character> family = new ArrayList<Character>();
-			List<Character> pretravList = Arrays.asList(pretrav);
-			List<Character> posttravList = Arrays.asList(posttrav);
+			// if all parents are correctly removed from both Lists in the size > 1 branch, then we
+			// can safely remove this child from both lists at index = 0
+			preTrav.remove(0);
+			return new TreeNode<Character>(postTrav.remove(0));
 			
-			int numChildren = 0;
-			int pretravIdx = prestart + 1;
-			int posttravIdxCurr = 0;
-			int posttravIdxPrev = -1;
-			//family.add(pretrav[prestart]);
-			//family.add(pretrav[pretravIdx]);
+		} else if (size > 1) {
+			// Look at subRoot of subTree, remove it from preTrav, and store as a sentinel 
+			Character rootChar = preTrav.remove(0);
+			TreeNode<Character> root = new TreeNode<Character>(rootChar);
 			
-			ListIterator<Character> pretravIterator = pretravList.listIterator(pretravIdx);
-			ListIterator<Character> posttravIterator = posttravList.listIterator();
-			Character c = pretravIterator.next();
-			family.add(c);
-			int familySize = 1;
-			while (posttravIterator.next() != c) {
-				familySize++;
+			// Build subTrees until we see the subRoot sentinel in postTrav at index = 0
+			while (postTrav.get(0) != rootChar) {				
+				root.addChild(buildTree(postTrav.indexOf(preTrav.get(0)) + 1, 0, 0));				
 			}
 			
-			/*
-			while (pretravIterator.hasNext()) {
-				ListIterator<Character> posttravIterator = posttravList.listIterator();
-				while (pretravIdx < (size + prestart)) {
-					posttravIdxCurr = indexOf(pretrav[pretravIdx], posttrav);
-					pretravIdx += (posttravIdxCurr - posttravIdxPrev);
-					family.add(pretrav[pretravIdx]);
-					posttravIdxPrev = posttravIdxCurr;
-					//numChildren++;
-				}
+			// Set the parent of all root's children to the root
+			for (TreeNode<Character> child : root.getChildren()) {
+				child.setParent(root);
 			}
-			*/
 
-			for (int k = 0; k < family.size(); k++) {
-				familySize = pretrav[family.get(k)] - posttrav[family.get(k - 1)];
-				TreeNode<Character> n = buildTree(familySize, pretrav[family.get(k)], posttrav[family.get(k - 1)]);
-				root.addChild(n);
-				n.setParent(root);
-			}
+			// After we see the root we no longer need it can remove it from postTrav
+			postTrav.remove(0);
+			
 			return root;
-		}
-		
+		}		
 		return null;
 	}
 	
@@ -129,83 +94,34 @@ public class proj2 {
 					
 					list.addLast(line.charAt(k));
 				}
-			}
-			
+			}		
 			array = new Character[list.size()];
 			for (int j = 0; j < list.size(); j++) {
 				array[j] = list.get(j);
-			}
-			
-		}
-		
+			}			
+		}		
 		return array;
 	}
 	
-	private static int indexOf(Character c, Character[] array) {		
-		for (int k = 0; k < array.length; k++) {
-			if (array[k].equals(c)) {
-				return k;
-			}
-		}		
-		return -1;
-	}
 	
-	public static int numChildren(Character[] pretrav, Character[] posttrav) {
-		int size = pretrav.length;
-		int prestart = 0;
-		int numChildren = 0;
-		int pretravIdx = prestart + 1;
-		int posttravIdxCurr = 0;
-		int posttravIdxPrev = -1;
-		while (pretravIdx < (size + prestart)) {
-			posttravIdxCurr = indexOf(pretrav[pretravIdx], posttrav);
-			pretravIdx += (posttravIdxCurr - posttravIdxPrev);
-			posttravIdxPrev = posttravIdxCurr;
-			numChildren++;
-		}
-		return numChildren;
-	}
-	
-	public static int familySize(Character rootC) {
-		int famSize = 1;
-		
-		CircularLinkedList<Character> pretravList = toCircularList(pretrav);
-		CircularLinkedList<Character> posttravList = toCircularList(posttrav);
-		
-
-		ListIterator<Character> preCursor = pretravList.listIterator(pretravList.find(rootC));
-		
-		System.out.println("1) preCusror.next() = " + preCursor.next());
-		System.out.println("2) preCusror.next() = " + preCursor.next());
-		System.out.println("3) preCusror.next() = " + preCursor.next());
-		System.out.println("4) preCusror.next() = " + preCursor.next());
-		System.out.println("===============");
-		
-		Character subRootC = pretravList.get(pretravList.find(rootC) + 1);		
-		ListIterator<Character> postCursor = posttravList.listIterator(posttravList.find(rootC));
-		Character postChar = postCursor.previous();
-		System.out.println("postChar = " + postChar);
-		System.out.println("rootC = " + rootC);
-		while (postChar != rootC) {		
-			System.out.println("subRootC = " + subRootC);
-			while (postChar != subRootC) {				
-				preCursor.next();
-				postChar = postCursor.next();
-			}
-			subRootC = preCursor.next();
-			preCursor.previous();
-			famSize++;			
-		}
-		return famSize;
-	}
-	
-	public static CircularLinkedList<Character> toCircularList(Character[] array) {
-		CircularLinkedList<Character> list = new CircularLinkedList<Character>();
+	public static ArrayList<Character> toArrayList(Character[] array) {
+		ArrayList<Character> list = new ArrayList<Character>();
 		for (int k = 0; k < array.length; k++) {			
-			list.append(array[k]);			
-		}
+			list.add(array[k]);			
+		}		
 		return list;
 	}
+	
+	public static void findRelationship(Character[] array, GeneralTree<Character> tree) {
+		tree.clearMarks();
+		TreeNode<Character> node0 = tree.find(array[0]);
+		TreeNode<Character> node1 = tree.find(array[1]);
+		tree.findRelationship(node0, node1);
+	}
+	
+	
+	
+	
 	
 	
 	

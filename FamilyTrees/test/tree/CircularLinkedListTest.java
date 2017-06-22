@@ -21,10 +21,6 @@ public class CircularLinkedListTest {
 	private static final Character K = new Character('K');
 	private static final Character[] charArry = { A, B, C, D, E, F, G, H, I, J, K };
 
-	@Test
-	public void testSize() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testCircularLinkedList() {
@@ -33,7 +29,19 @@ public class CircularLinkedListTest {
 
 	@Test
 	public void testListIteratorInt() {
-		fail("Not yet implemented");
+		CircularLinkedList<Character> list = new CircularLinkedList<Character>();
+		assertEquals(0, list.size());
+		list.append(A);
+		assertEquals(1, list.size());
+		list.append(B);
+		assertEquals(2, list.size());
+		list.append(C);
+		assertEquals(3, list.size());
+		
+		assertEquals(A, list.listIterator(0).next());
+		assertEquals(B, list.listIterator(1).next());
+		assertEquals(C, list.listIterator(2).next());
+		assertEquals(C, list.listIterator(0).previous());
 	}
 
 	@Test
@@ -42,18 +50,21 @@ public class CircularLinkedListTest {
 		assertEquals(0, list.size());
 		list.append(A);
 		assertEquals(1, list.size());
+		assertEquals(A, list.get(0));
+		
 		list.append(B);
 		assertEquals(2, list.size());
+		assertEquals(A, list.get(0));
+		assertEquals(B, list.get(1));
 		
-		System.out.println(list.listIterator(0).next());
-		System.out.println(list.listIterator(1).next());
-		System.out.println(list.listIterator(2).next());
-		//System.out.println(list.listIterator(3).next());
+		list.append(C);
+		assertEquals(3, list.size());
+		assertEquals(A, list.get(0));
+		assertEquals(B, list.get(1));
+		assertEquals(C, list.get(2));
+		
 	}
 
-	@Test
-	public void testSetIntE() {
-		fail("Not yet implemented");
-	}
+
 
 }

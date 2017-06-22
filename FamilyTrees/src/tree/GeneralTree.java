@@ -29,6 +29,32 @@ public class GeneralTree<E> {
 		tn.getChildren().add(new TreeNode<E>(element, tn));
 	}
 	
+	public void clearMarks() {
+		for(TreeNode<E> element : preorder()) {
+			element.setMark(0);
+		}
+	}
+	
+	public void findRelationship(TreeNode<E> node0, TreeNode<E> node1) {
+		int[] array = addMarks(node0, node1);
+		
+		
+	}
+	
+	public int[] addMarks(TreeNode<E> node0, TreeNode<E> node1) {
+		int[] array = null;
+		return array;
+	}
+	
+	public TreeNode<E> find(E e) {
+		for (TreeNode<E> treeNode : preorder()) {
+			if (treeNode.getData().equals(e)) {
+				return treeNode;
+			}
+		}
+		return null;
+	}
+	
 
 	
 	public TreeNode<E> root() {
@@ -79,13 +105,13 @@ public class GeneralTree<E> {
 		queue.enqueue(tn);
 		while (!queue.isEmpty()) {
 			TreeNode<E> parent = queue.dequeue();
-			System.out.print(parent.getData().toString() + ", ");
+			System.out.print(parent.getData().toString() + " ");
 
 			for (TreeNode<E> child : children(parent)) {
 				queue.enqueue(child);
 			}
 		}
-		System.out.print(".");
+		//System.out.print(".");
 	}
 	
 	public Iterable<TreeNode<E>> preorder() {
@@ -136,18 +162,14 @@ public class GeneralTree<E> {
 	}
 	
 	public int fanOut(TreeNode<E> node) {
-		return fanOut(node, 0);
+		int result = node.numChildren();
+		for (TreeNode<E> child : node.getChildren()) {
+			result = Math.max(result, fanOut(child));
+		}
+		return result;
 	}
 	
-	private int fanOut(TreeNode<E> node, int fan) {
-		if (numChildren(node) > fan) {
-			fan = numChildren(node);
-		}
-		for (TreeNode<E> child : node.getChildren()) {
-			fan = fanOut(child, fan);
-		}
-		return fan;
-	}
+
 	
 
 

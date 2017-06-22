@@ -66,6 +66,11 @@ public class GeneralTreeTest {
 		tree.insert(tree.root(), B);
 		
 		tree.insert(tree.root(), C);
+		
+		tree.levelOrder(tree.root());
+		System.out.println();
+		System.out.println("fanOut = " + tree.fanOut(tree.root()));
+		
 		tree.insert(tree.root(), D);
 		TreeNode<Character> tnB = tree.root().getChildren().getFirst();
 		TreeNode<Character> tnC = tree.root().getChildren().getLast();
