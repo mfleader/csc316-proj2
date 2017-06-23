@@ -2,6 +2,14 @@ package tree;
 
 import java.util.LinkedList;
 
+/**
+ * This class represents a TreeNode position in a given tree, and has
+ * functionality for a family tree.
+ * @author Matthew F. Leader
+ *
+ * @param <E>
+ * 			an element type for the TreeNode
+ */
 public class TreeNode<E> {
 	
     /** the data within the element */
@@ -10,7 +18,7 @@ public class TreeNode<E> {
 	private TreeNode<E> parent;
 	/** a reference to the next element in the list */
 	private LinkedList<TreeNode<E>> children;
-	/** true if an ancestor of this node */
+	/** used to denote if this node is in the lineage of a TreeNodes */
 	private int mark;
 
     /**
@@ -36,9 +44,26 @@ public class TreeNode<E> {
         this(data, null);
     }
     
+    /**
+     * Accessor method for this TreeNode's children
+     * @return the list of this TreeNode's children
+     */
     public LinkedList<TreeNode<E>> getChildren() {
     	return children;
     }
+    
+    /**
+     * Calculates the number of hops between this node and one
+     * of its descendants
+     * @param descendant
+     * @return
+     */
+	public int distanceToAncestor(TreeNode<E> descendant) {
+		if (this == descendant) {
+			return 0;
+		}
+		return distanceToAncestor(descendant.parent) + 1;
+	}
     
     public int numChildren() {
     	if (children != null) {
@@ -57,10 +82,6 @@ public class TreeNode<E> {
     
     public void addChild(TreeNode<E> n) {
     	children.addLast(n);
-    }
-    
-    public void addChildAt(int index, TreeNode<E> n) {
-    	children.add(index, n);
     }
     
     public E getData() {
@@ -87,12 +108,8 @@ public class TreeNode<E> {
     	return mark;
     }
     
-	public int distanceToAncestor(TreeNode<E> descendant) {
-		if (this == descendant) {
-			return 0;
-		}
-		return distanceToAncestor(descendant.parent) + 1;
-	}
+    
+
 
 
 }

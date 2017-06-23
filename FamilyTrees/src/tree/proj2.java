@@ -6,10 +6,18 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * This program generates a unique tree given the tree's preorder and
+ * postorder traversal. It then can report on the familial relationships
+ * between nodes in the tree.
+ * @author Matthew F. Leader
+ *
+ */
 public class proj2 {
 	
-
+	/** a global array of the characters tree's preorder traversal */
 	private static ArrayList<Character> pretrav;
+	/** a global array of the characters tree's postorder traversal */
 	private static ArrayList<Character> posttrav;
 	
 	public static void main(String[] args) {
@@ -57,8 +65,6 @@ public class proj2 {
         console.close();
 	}
 	
-
-	
     /**
      * Returns a Scanner for input from a file.
      *
@@ -103,7 +109,8 @@ public class proj2 {
 
 
 	/**
-	 * 
+	 * Recursively build a tree given the size of the subtree, and where the subRoot
+	 * is located in the pretrav and posttrav array
 	 * @param size
 	 * 				the number of nodes in the subtree to be built
 	 * @param prestart
@@ -141,8 +148,12 @@ public class proj2 {
 		return null;
 	}
 	
-
-	
+	/**
+	 * Converts a line of text delimited by commas into an ArrayList
+	 * @param line
+	 * 				a line of text
+	 * @return an ArrayList of Characters
+	 */
 	public static ArrayList<Character> toArrayList(String line) {
 		ArrayList<Character> array = new ArrayList<Character>();		
 		for (int k = 0; k < line.length(); k++) {
@@ -159,8 +170,15 @@ public class proj2 {
 		return array;
 	}
 	
-	
-	
+	/**
+	 * Reports a String that describes the relationship between the two Characters in the
+	 * given tree	
+	 * @param array
+	 * 				an array of the given Characters
+	 * @param tree
+	 * 				the tree that these Characters reside in
+	 * @return
+	 */
 	public static String findRelationship(ArrayList<Character> array, GeneralTree<Character> tree) {
 		tree.clearMarks();
 		TreeNode<Character> node0 = tree.find(array.get(0));
