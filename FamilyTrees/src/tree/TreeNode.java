@@ -87,11 +87,11 @@ public class TreeNode<E> {
     	return mark;
     }
     
-	public int distanceToAncestor(TreeNode<E> ancestor) {
-		if (this == ancestor) {
+	public int distanceToAncestor(TreeNode<E> descendant) {
+		if (this == descendant) {
 			return 0;
 		}
-		return distanceToAncestor(ancestor.parent) + 1;
+		return distanceToAncestor(descendant.parent) + 1;
 	}
 
 

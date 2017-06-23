@@ -35,7 +35,7 @@ public class GeneralTree<E> {
 		}
 	}
 	
-	public void findRelationship(TreeNode<E> node0, TreeNode<E> node1) {
+	public String findRelationship(TreeNode<E> node0, TreeNode<E> node1) {
 		if (node0 == null) {
 			throw new IllegalArgumentException(node0.getData().toString() + "is not in this family tree.");
 		}
@@ -44,8 +44,8 @@ public class GeneralTree<E> {
 		}
 		clearMarks();
 		markAncestors(node0);
-		TreeNode<E> leastCommonAncestor = leastCommonAncestor(node1); 
-		
+		TreeNode<E> lca = leastCommonAncestor(node1); 
+		return getRelationship(distanceToAncestor(node0, lca), distanceToAncestor(node1, lca));
 	}
 	
 	
@@ -64,10 +64,8 @@ public class GeneralTree<E> {
 	}
 	
 	public int distanceToAncestor(TreeNode<E> descendent, TreeNode<E> ancestor) {
-		return descendent.distanceToAncestor(ancestor);
-	}
-	
-
+		return ancestor.distanceToAncestor(descendent);
+	}	
 	
 	public TreeNode<E> find(E e) {
 		for (TreeNode<E> treeNode : preorder()) {
@@ -76,6 +74,61 @@ public class GeneralTree<E> {
 			}
 		}
 		return null;
+	}
+
+	
+	public String getRelationship(int nodeA, int nodeB) {
+		if (nodeA == 0) {
+			if (nodeB == 0) {
+				return "";
+			} else if (nodeB == 1) {
+				return " parent";
+			} else if (nodeB == 2) {
+				// add loop for great
+				return " grandparent";
+			} else if (nodeB == 3) {
+				return " great grandparent";
+			} else if (nodeB > 3) {
+				return " (great)^" + (nodeB - 2) + "-grandparent";
+			}
+		} else if (nodeA == 1) {
+			if (nodeB == 0) {
+				return " child";
+			} else if (nodeB == 1) {
+				return " sibling";
+			} else if (nodeB == 2) {
+				//add loop for great
+				return " aunt";
+			} else if (nodeB > 2) {
+				return " (great)^" + (nodeB - 2) + "-aunt";
+			}
+		} else if (nodeA == 2) {
+			if (nodeB == 0) {				
+				return " grandchild";
+			} else if (nodeB == 1) {
+				return " niece";
+			}
+		} else if (nodeA > 2) {
+			if (nodeB == 0) {
+				return " (great)^" + (nodeA - 2) + "-grandchild";
+			} else if (nodeB == 1) {
+				return " (great)^" + (nodeA - 2) + "-niece";
+			} 
+		}	
+			
+		return (Math.min(nodeA, nodeA) - 1) + "th cousin " + Math.abs(nodeA - nodeB) + " times removed.";
+	}
+	
+	private String greatness(int greatness) {
+		StringBuilder great = new StringBuilder("");
+		if (greatness > 2) {
+			great.append("great");
+			for (int k = 3; k < greatness; k++) {
+				great.append(" great");
+			}
+		}
+
+		return great.toString();
 	}
 	
 	// LinkedQueue<TreeNode<E>>

@@ -35,7 +35,7 @@ public class proj2 {
         	line = input.nextLine();        	
         	if (line.charAt(0) == '?') {
         		pair = makeCharArray(line);
-        		findRelationship(pair, tree);
+        		System.out.println(pair[0] + " is " + pair[1] + findRelationship(pair, tree));
         	}
         }
 	}
@@ -112,11 +112,11 @@ public class proj2 {
 		return list;
 	}
 	
-	public static void findRelationship(Character[] array, GeneralTree<Character> tree) {
+	public static String findRelationship(Character[] array, GeneralTree<Character> tree) {
 		tree.clearMarks();
 		TreeNode<Character> node0 = tree.find(array[0]);
 		TreeNode<Character> node1 = tree.find(array[1]);
-		tree.findRelationship(node0, node1);
+		return tree.findRelationship(node0, node1);
 	}
 	
 	
