@@ -84,7 +84,6 @@ public class GeneralTree<E> {
 			} else if (nodeB == 1) {
 				return " parent";
 			} else if (nodeB == 2) {
-				// add loop for great
 				return " grandparent";
 			} else if (nodeB == 3) {
 				return " great grandparent";
@@ -97,7 +96,6 @@ public class GeneralTree<E> {
 			} else if (nodeB == 1) {
 				return " sibling";
 			} else if (nodeB == 2) {
-				//add loop for great
 				return " aunt";
 			} else if (nodeB > 2) {
 				return " (great)^" + (nodeB - 2) + "-aunt";
@@ -114,37 +112,28 @@ public class GeneralTree<E> {
 			} else if (nodeB == 1) {
 				return " (great)^" + (nodeA - 2) + "-niece";
 			} 
-		}	
-			
-		return (Math.min(nodeA, nodeA) - 1) + "th cousin " + Math.abs(nodeA - nodeB) + " times removed.";
+		}				
+		return " " + (Math.min(nodeA, nodeA) - 1) + "th cousin " + Math.abs(nodeA - nodeB) + " times removed.";
 	}
 	
-	private String greatness(int greatness) {
-		StringBuilder great = new StringBuilder("");
-		if (greatness > 2) {
-			great.append("great");
-			for (int k = 3; k < greatness; k++) {
-				great.append(" great");
-			}
-		}
-
-		return great.toString();
-	}
 	
 	// LinkedQueue<TreeNode<E>>
-	public void levelOrder(TreeNode<E> tn) {
+	public String levelOrder(TreeNode<E> tn) {
 		LinkedQueue<TreeNode<E>> queue = new LinkedQueue<TreeNode<E>>();
+		StringBuilder levelOrder = new StringBuilder();
 
 		queue.enqueue(tn);
+		levelOrder.append(tn.getData().toString());
 		while (!queue.isEmpty()) {
 			TreeNode<E> parent = queue.dequeue();
-			System.out.print(parent.getData().toString() + " ");
-
+			if (!isRoot(parent)) {
+				levelOrder.append(", " + parent.getData().toString());
+			}			
 			for (TreeNode<E> child : children(parent)) {
 				queue.enqueue(child);
 			}
 		}
-		//System.out.print(".");
+		return levelOrder.toString();
 	}
 	
 

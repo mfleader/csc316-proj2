@@ -246,7 +246,40 @@ public class GeneralTreeTest {
 		
 		assertEquals(0, tree.distanceToAncestor(tree.root(), tree.root()));
 		assertEquals(1, tree.distanceToAncestor(tnB, tree.root()));
-		assertEquals(2, tree.distanceToAncestor(tnE, tree.root()));
+		assertEquals(2, tree.distanceToAncestor(tnE, tree.root()));		
+	}
+	
+	@Test
+	public void testGetRelationshipIntInt() {
+		GeneralTree<Character> tree = new GeneralTree<Character>(A);
+		assertEquals(0, tree.distanceToAncestor(tree.root(), tree.root()));
+		
+		
+				
+		tree.insert(tree.root(), B);		
+		tree.insert(tree.root(), C);		
+		tree.insert(tree.root(), D);		
+		TreeNode<Character> tnB = tree.root().getChildren().getFirst();
+		TreeNode<Character> tnC = tree.root().getChildren().getLast();
+		TreeNode<Character> tnD = tree.root().getChildren().getLast();
+
+		tree.insert(tnB, E);
+		TreeNode<Character> tnE = tnB.getChildren().getLast();		
+		tree.insert(tnB, F);
+		TreeNode<Character> tnF = tnB.getChildren().getLast();
+		
+		tree.insert(tnF, I);
+		TreeNode<Character> tnI = tnF.getChildren().getLast();
+		tree.insert(tnF, J);
+		TreeNode<Character> tnJ = tnF.getChildren().getLast();
+		tree.insert(tnF, K);
+		TreeNode<Character> tnK = tnF.getChildren().getLast();
+				
+		tree.insert(tnC, G);
+		TreeNode<Character> tnG = tnC.getChildren().getLast();
+		tree.insert(tnC, H);
+		TreeNode<Character> tnH = tnC.getChildren().getLast();
+		
 		
 	}
 }

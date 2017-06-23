@@ -1,5 +1,5 @@
 cd C:\Users\Matthew\git\csc316-proj2\FamilyTrees\src
-javac tree\proj1.java
+javac tree\proj2.java
 
 java tree.proj2 < ..\test-files\in1.txt > ..\test-files\out1.txt
 FC ..\test-files\out1.txt ..\test-files\exp1.txt

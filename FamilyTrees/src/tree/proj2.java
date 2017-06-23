@@ -1,44 +1,105 @@
 package tree;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public class proj2 {
 	
-	private static Character[] pretrav;
-	private static Character[] posttrav;
-	private static ArrayList<Character> preTrav;
-	private static ArrayList<Character> postTrav;
+
+	private static ArrayList<Character> pretrav;
+	private static ArrayList<Character> posttrav;
 	
 	public static void main(String[] args) {
-		
-		
-        Scanner input = new Scanner(System.in);
+				
+        Scanner console = new Scanner(System.in);
+        Scanner input = getInputScanner(console);
+        PrintStream output = getOutputPrintStream(console);
+        TreeNode<Character> root = null;
+        GeneralTree<Character> tree = null;
         String line;
         
+        // Create ArrayLists for pretrav and posttrav
         line = input.nextLine();
-        pretrav = makeCharArray(line.substring(2));
+		if (line.charAt(0) == '<') {
+			pretrav = toArrayList(line);
+		} else if (line.charAt(0) == '>') {
+			posttrav = toArrayList(line);
+		}
         line = input.nextLine();
-        posttrav = makeCharArray(line.substring(2));        
-        preTrav = toArrayList(pretrav);
-        postTrav = toArrayList(posttrav);
-        
-        
-        TreeNode<Character> root = buildTree(pretrav.length, 0, 0);
-        GeneralTree<Character> tree = new GeneralTree<Character>(root);
-        
-        tree.levelOrder(tree.root());
-        
-        Character[] pair = new Character[2];
+		if (line.charAt(0) == '<') {
+			pretrav = toArrayList(line);
+		} else if (line.charAt(0) == '>') {
+			posttrav = toArrayList(line);
+		}
+		
+		// Build family tree
+		root = buildTree(pretrav.size(), 0, 0);
+        tree = new GeneralTree<Character>(root);            
+        	
+        // Print answers to questions about positions in family tree
         while (input.hasNextLine()) {
-        	line = input.nextLine();        	
-        	if (line.charAt(0) == '?') {
-        		pair = makeCharArray(line);
-        		System.out.println(pair[0] + " is " + pair[1] + findRelationship(pair, tree));
-        	}
-        }
+        	line = input.nextLine();        	        	
+        	if (line.length() > 0 && line.charAt(0) == '?') {
+        		ArrayList<Character> pair = toArrayList(line);
+               	output.println(pair.get(0) + " is " + pair.get(1) + findRelationship(pair, tree));
+            }        		
+        }        	
+        
+        //Print level order
+        output.println(tree.levelOrder(tree.root()) + ".");
+        
+        // Use input and output
+        input.close();
+        output.close();
+        console.close();
 	}
+	
+
+	
+    /**
+     * Returns a Scanner for input from a file.
+     *
+     * @param console Scanner for console
+     * @return Scanner for input from a file
+     */
+    public static Scanner getInputScanner(Scanner console) {
+        Scanner input = null;
+        while (input == null) {
+            System.out.print("input file name? ");
+            String name = console.nextLine();
+            try {
+                input = new Scanner(new File(name));
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found. Please try again.");
+            }
+        }
+        return input;
+    }
+
+    /**
+     * Returns a PrintStream for output to a file. NOTE: If file exists, this
+     * code will overwrite the existing file. It is likely that you want to add
+     * additional tests.
+     *
+     * @param console Scanner for console.
+     * @return PrintStream for output to a file
+     */
+    public static PrintStream getOutputPrintStream(Scanner console) {
+        PrintStream outputFile = null;
+        while (outputFile == null) {
+            System.out.print("output file name? ");
+            String name = console.nextLine();
+            try {
+                outputFile = new PrintStream(new File(name));
+            } catch (FileNotFoundException e) {
+                System.out.println("File unable to be written. Please try again.");
+            }
+        }
+        return outputFile;
+    }
 
 
 	/**
@@ -54,17 +115,17 @@ public class proj2 {
 		if (size == 1) {
 			// if all parents are correctly removed from both Lists in the size > 1 branch, then we
 			// can safely remove this child from both lists at index = 0
-			preTrav.remove(0);
-			return new TreeNode<Character>(postTrav.remove(0));
+			pretrav.remove(0);
+			return new TreeNode<Character>(posttrav.remove(0));
 			
 		} else if (size > 1) {
 			// Look at subRoot of subTree, remove it from preTrav, and store as a sentinel 
-			Character rootChar = preTrav.remove(0);
+			Character rootChar = pretrav.remove(0);
 			TreeNode<Character> root = new TreeNode<Character>(rootChar);
 			
 			// Build subTrees until we see the subRoot sentinel in postTrav at index = 0
-			while (postTrav.get(0) != rootChar) {				
-				root.addChild(buildTree(postTrav.indexOf(preTrav.get(0)) + 1, 0, 0));				
+			while (posttrav.get(0) != rootChar) {				
+				root.addChild(buildTree(posttrav.indexOf(pretrav.get(0)) + 1, 0, 0));				
 			}
 			
 			// Set the parent of all root's children to the root
@@ -73,49 +134,37 @@ public class proj2 {
 			}
 
 			// After we see the root we no longer need it can remove it from postTrav
-			postTrav.remove(0);
+			posttrav.remove(0);
 			
 			return root;
 		}		
 		return null;
 	}
 	
-	public static Character[] makeCharArray(String line) {
-		Character[] array = null;
-		LinkedList<Character> list = new LinkedList<Character>();		
-		if (line.length() > 0) {
-			for (int k = 0; k < line.length(); k++) {
-				if (line.charAt(k) != ' '
-					&& line.charAt(k) != '<'
-					&& line.charAt(k) != '>'
-					&& line.charAt(k) != '?'
-					&& line.charAt(k) != '.'
-					&& line.charAt(k) != ',') {
-					
-					list.addLast(line.charAt(k));
-				}
-			}		
-			array = new Character[list.size()];
-			for (int j = 0; j < list.size(); j++) {
-				array[j] = list.get(j);
-			}			
-		}		
+
+	
+	public static ArrayList<Character> toArrayList(String line) {
+		ArrayList<Character> array = new ArrayList<Character>();		
+		for (int k = 0; k < line.length(); k++) {
+			if (line.charAt(k) != ' '
+				&& line.charAt(k) != '<'
+				&& line.charAt(k) != '>'
+				&& line.charAt(k) != '?'
+				&& line.charAt(k) != '.'
+				&& line.charAt(k) != ',') {		
+				
+				array.add(line.charAt(k));
+			}
+		}				
 		return array;
 	}
 	
 	
-	public static ArrayList<Character> toArrayList(Character[] array) {
-		ArrayList<Character> list = new ArrayList<Character>();
-		for (int k = 0; k < array.length; k++) {			
-			list.add(array[k]);			
-		}		
-		return list;
-	}
 	
-	public static String findRelationship(Character[] array, GeneralTree<Character> tree) {
+	public static String findRelationship(ArrayList<Character> array, GeneralTree<Character> tree) {
 		tree.clearMarks();
-		TreeNode<Character> node0 = tree.find(array[0]);
-		TreeNode<Character> node1 = tree.find(array[1]);
+		TreeNode<Character> node0 = tree.find(array.get(0));
+		TreeNode<Character> node1 = tree.find(array.get(1));
 		return tree.findRelationship(node0, node1);
 	}
 	
